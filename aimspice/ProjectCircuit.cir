@@ -1,0 +1,75 @@
+[aimspice]
+[description]
+1150
+ProjectCircuit
+.include C:\Users\AdminA\Documents\tfe\project\gpdk90nm_tt.cir
+
+.param width = 0.10u
+.param length = 0.10u
+
+.subckt NOT in out Vdd
+xmp1 out in Vdd Vdd pmos1v l=length w=width
+xmn1 out in 0 0 nmos1v l=length w=width
+.ends
+
+.subckt NAND in1 in2 out Vdd
+xmp1 out in1 Vdd Vdd pmos1v l=length w=width
+xmp2 out in2 Vdd Vdd pmos1v l=length w=width
+xmn1 out in1 temp temp nmos1v l=length w=width
+xmn2 temp in2 0 0 nmos1v l=length w=width
+.ends
+
+.subckt NOR in1 in2 out Vdd
+xmp1 temp in1 Vdd Vdd pmos1v l=length w=width
+xmp2 out in2 temp temp pmos1v l=length w=width
+xmn1 out in1 0 0 nmos1v l=length w=width
+xmn2 out in2 0 0 nmos1v l=length w=width
+.ends
+
+.subckt AND in1 in2 out Vdd
+xNAND in1 in2 temp Vdd NAND
+xNOT temp out Vdd NOT
+.ends
+
+* Voltage supply
+VDD 1 0 dc 0.5v
+VRW rw 0 dc 0.5v
+VSEL sel 0 dc 0.5v
+VINP inp 0 dc 0.5v
+
+
+* xNOT1 1 2 1 NOT
+* xNAND 1 1 3 1 NAND
+* xNOR 0 0 4 1 NOR
+* xAND 0 1 5 1 AND
+
+xANDrwsel rw sel E 1 AND
+xNANDinpE inp E R 1 NAND
+xNOTinp inp inpNot 1 NOT
+xNAND inpNot E S 1 NAND
+
+xNANDRQnot R Qnot Q 1 NAND
+xNANDSQ S Q Qnot 1 NAND
+xNANDQsel Q sel outp 1 NAND
+
+
+
+
+[dc]
+1
+VINP
+0
+5
+5
+[dctemp]
+-200
+400
+10
+[ana]
+8 1
+0
+1 1
+1 1 0 5
+1
+v(outp)
+[end]
