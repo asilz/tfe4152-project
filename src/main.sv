@@ -39,10 +39,10 @@ module main_tb;
     
 
     initial begin
-    $monitor("Time: %0t | a=%d | rw=%b | sel=%d | input=[%d] | output=[%d]", 
-              $time, a, rw, sel, 
-              inp, 
-              out_);
+    $monitor("Time: %0t | a=%b,%b,%b | rw=%b | input=%b,%b,%b,%b,%b,%b,%b,%b | output=%b,%b,%b,%b,%b,%b,%b,%b", 
+              $time, a[0], a[1], a[2], rw, 
+              inp[0],inp[1],inp[2],inp[3],inp[4],inp[5],inp[6],inp[7], 
+              out_[0],out_[1], out_[2], out_[3], out_[4], out_[5], out_[6], out_[7]);
     
 
     a = 0;
