@@ -5,7 +5,15 @@ module main_tb;
     wire[7:0]sel;
     reg[2:0]a;
     reg[7:0]inp;
-    
+
+    wire rw;
+    wire valid;
+    reg select;
+    reg op;
+    reg reset;
+
+    reg clk;
+
     wire[7:0]outp0;
     wire[7:0]outp1;
     wire[7:0]outp2;
@@ -16,8 +24,9 @@ module main_tb;
     wire[7:0]outp7;
     wire[7:0]out_;
 
-    reg rw;
-    Decoder a1(a, sel);
+    Simple_FSM f(clk, reset, valid, rw);
+
+    Decoder a1(a, valid, sel);
     mem_word word0(rw, sel[0], inp, outp0);
     mem_word word1(rw, sel[1], inp, outp1);
     mem_word word2(rw, sel[2], inp, outp2);
@@ -36,41 +45,71 @@ module main_tb;
     NAND8 nand6(outp0[6],outp1[6], outp2[6], outp3[6], outp4[6], outp5[6], outp6[6], outp7[6], out_[6]);
     NAND8 nand7(outp0[7],outp1[7], outp2[7], outp3[7], outp4[7], outp5[7], outp6[7], outp7[7], out_[7]);
 
+    always
+    begin
+        #5 clk = 1;
+        #5 clk = 0;
+    end
     
 
     initial begin
-    $monitor("Time: %0t | a=%b,%b,%b | rw=%b | input=%b,%b,%b,%b,%b,%b,%b,%b | output=%b,%b,%b,%b,%b,%b,%b,%b", 
-              $time, a[0], a[1], a[2], rw, 
-              inp[0],inp[1],inp[2],inp[3],inp[4],inp[5],inp[6],inp[7], 
-              out_[0],out_[1], out_[2], out_[3], out_[4], out_[5], out_[6], out_[7]);
+    $monitor("Time: %0t | input=%b,%b,%b,%b,%b,%b,%b,%b | a=%b,%b,%b | op=%b | select=%b | output=%b,%b,%b,%b,%b,%b,%b,%b | valid=%b | rw=%b | clk=%b | reset=%b", 
+              $time,  
+              inp[0],inp[1],inp[2],inp[3],inp[4],inp[5],inp[6],inp[7],a[0], a[1], a[2], op, select,
+              out_[0],out_[1], out_[2], out_[3], out_[4], out_[5], out_[6], out_[7], valid, rw, clk, reset);
     
+    #3 
 
+    reset = 1;
     a = 0;
-    rw = 0;
     inp = 0;
-
+    op = 0;
+    select = 0;
+    #20
+    reset = 0;
     #10;
 
-    a = 0;
-    rw = 1;
-    inp = 3;
-
+    inp = 65;
+    op = 1;
+    select = 1;
     #10
     a = 1;
     #10
-
-    rw = 1;
-    inp = 5;
-
+    inp = 83;
+    op = 1;
+    select = 1;
+    #10
+    a = 2;
+    #10
+    inp = 73;
+    op = 1;
+    select = 1;
+    #10
+    a = 3;
     #10
 
-    rw = 0;
+    inp = 73;
+    op = 1;
+    select = 1;
 
     #10
+    a = 4;
+    #10
 
+    inp = 76;
+    op = 1;
+    select = 1;
+    #10
+    op = 0;
+    select = 1;
+    #10
     a = 0;
-
     #10
+    a = 1;
+    #10
+    a = 2;
+    #10
+    a = 3;
 
     $finish;
     end

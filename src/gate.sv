@@ -21,4 +21,16 @@ module NAND8(input a,b,c,d,e,f,g,h, output out);
     assign out = !(a & b & c & d & e & f & g & h);
 endmodule
 
+module NOR(input a, b, output out);
+    assign out = !(a | b);
+endmodule
+
+module NOR4(input a, b, c, d, output out);
+    assign out = !(a | b | c | d);
+endmodule
+
+module OR(input a, b, output out);
+    assign out = a | b;
+endmodule
+
 `endif
