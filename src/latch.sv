@@ -31,7 +31,7 @@ module flipflop(input D, clk, output Q, Q_not);
     NAND n0(S, clk_not, sr0);
     NAND n1(R, clk_not, sr1);
 
-    sr_latch latch1(S, R, Q, Q_not);
+    sr_latch latch1(sr0, sr1, Q, Q_not);
 endmodule
 
 module mem_cell(input rw, sel, inp, output outp);
