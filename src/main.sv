@@ -24,7 +24,7 @@ module main_tb;
     wire[7:0]outp7;
     wire[7:0]out_;
 
-    Simple_FSM f(clk, reset, valid, rw);
+    Bad_FSM f(clk, reset, op, select,valid, rw);
 
     Decoder a1(a, valid, sel);
     mem_word word0(rw, sel[0], inp, outp0);
@@ -53,10 +53,10 @@ module main_tb;
     
 
     initial begin
-    $monitor("Time: %0t | input=%b,%b,%b,%b,%b,%b,%b,%b | a=%b,%b,%b | op=%b | select=%b | output=%b,%b,%b,%b,%b,%b,%b,%b | valid=%b | rw=%b | clk=%b | reset=%b", 
+    $monitor("Time: %0t | input=%b,%b,%b,%b,%b,%b,%b,%b | a=%b,%b,%b | op=%b | select=%b | output=%b,%b,%b,%b,%b,%b,%b,%b | valid=%b | rw=%b | clk=%b | reset=%b | sel=%b,%b,%b,%b,%b,%b,%b,%b", 
               $time,  
               inp[0],inp[1],inp[2],inp[3],inp[4],inp[5],inp[6],inp[7],a[0], a[1], a[2], op, select,
-              out_[0],out_[1], out_[2], out_[3], out_[4], out_[5], out_[6], out_[7], valid, rw, clk, reset);
+              out_[0],out_[1], out_[2], out_[3], out_[4], out_[5], out_[6], out_[7], valid, rw, clk, reset, sel[0], sel[1], sel[2], sel[3], sel[4], sel[5], sel[6], sel[7]);
     
     #3 
 
@@ -104,6 +104,7 @@ module main_tb;
     select = 1;
     #10
     a = 0;
+    inp = 0;
     #10
     a = 1;
     #10
