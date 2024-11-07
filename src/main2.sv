@@ -34,14 +34,14 @@ module fsm_tb;
 
     AND and1(alpha, select_not, zeta);
     OR or1(beta, zeta, gamma);
-    NOR nor2(gamma, reset, D_1_input);
+    OR nor2(gamma, reset, D_1_input);
 
     AND and2(rw, valid, epsilon);
     OR or3(select_not, epsilon, phi);
-    NOR nor4(phi, reset, D_2_input);
+    OR nor4(phi, reset, D_2_input);
 
-    d_latch D_1(D_1_input, clk, D_1_output, rw);
-    d_latch D_2(D_2_input, clk, D_2_output, valid);
+    flipflop D_1(D_1_input, clk, D_1_output, rw);
+    flipflop D_2(D_2_input, clk, D_2_output, valid);
 
     always
     begin

@@ -19,6 +19,21 @@ NAND n2(d_not, E, nand2_out);
 sr_latch sr(nand1_out, nand2_out, Q, Q_not);
 endmodule
 
+module flipflop(input D, clk, output Q, Q_not);
+    wire S;
+    wire R;
+    wire clk_not;
+    wire sr0;
+    wire sr1;
+
+    d_latch latch0(D, clk, S, R);
+    INVERT inv(clk, clk_not);
+    NAND n0(S, clk_not, sr0);
+    NAND n1(R, clk_not, sr1);
+
+    sr_latch latch1(S, R, Q, Q_not);
+endmodule
+
 module mem_cell(input rw, sel, inp, output outp);
     wire E;
     wire Q_not;
@@ -47,6 +62,9 @@ module FSM(input clk, op, select, reset, output valid, rw);
     wire D_1_input;
     wire D_2_input;
 
+    wire valid_;
+    wire rw_;
+
     wire nor0_output;
     wire nor1_output;
     wire nor2_output;
@@ -59,7 +77,7 @@ module FSM(input clk, op, select, reset, output valid, rw);
     NOR nor1(op, nor0_output, nor1_output);
     NOR nor2(select, nor0_output, nor2_output);
     
-    NAND nand0(valid, rw, nand0_output);
+    NAND nand0(valid_, rw_, nand0_output);
 
     NOR or0(nor1_output, nor2_output, D_1_input_);
     AND nand1(nand0_output, select, D_2_input_);
@@ -68,8 +86,11 @@ module FSM(input clk, op, select, reset, output valid, rw);
     NOR nor4(reset, D_2_input_, D_2_input);
     
 
-    d_latch D_1(D_1_input, clk, D_1_output, rw);
-    d_latch D_2(D_2_input, clk, D_2_output, valid);
+    flipflop D_1(D_1_input, clk, D_1_output, rw_);
+    flipflop D_2(D_2_input, clk, D_2_output, valid_);
+
+    assign valid = valid_;
+    assign rw = rw_;
     
 
 endmodule
