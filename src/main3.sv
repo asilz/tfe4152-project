@@ -24,7 +24,7 @@ module main_tb;
     wire[7:0]outp7;
     wire[7:0]out_;
 
-    FSM f(clk, op, select, reset, valid, rw);
+    Good_FSM f(clk, op, select, reset, valid, rw);
 
     Decoder a1(a, valid, sel);
     mem_word word0(rw, sel[0], inp, outp0);

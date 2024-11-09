@@ -1,25 +1,25 @@
 `include "../src/gate.sv"
 
 module sr_latch(input R, S, output Q, Q_not);
-sr_port sr0(R, Q_not, Q);
-sr_port sr1(S, Q, Q_not);
+    sr_port sr0(R, Q_not, Q);
+    sr_port sr1(S, Q, Q_not);
 endmodule
 
 module sr_port(input a, b, output c);
-NAND nand0(a, b, c);
+    NAND nand0(a, b, c);
 endmodule
 
 module d_latch(input D, E, output Q, Q_not);
-wire nand1_out;
-wire nand2_out;
-wire d_not;
-NAND n1(D, E, nand1_out);
-INVERT i1(D, d_not);
-NAND n2(d_not, E, nand2_out);
-sr_latch sr(nand1_out, nand2_out, Q, Q_not);
+    wire nand1_out;
+    wire nand2_out;
+    wire d_not;
+    NAND n1(D, E, nand1_out);
+    INVERT i1(D, d_not);
+    NAND n2(d_not, E, nand2_out);
+    sr_latch sr(nand1_out, nand2_out, Q, Q_not);
 endmodule
 
-module flipflop(input D, input clk, output Q, output Q_not);
+module flipflop(input D, clk, output Q, Q_not);
     wire S;
     wire R;
     wire clk_not;
