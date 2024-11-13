@@ -1,10 +1,6 @@
 `ifndef MY_MODULE_SV
 `define MY_MODULE_SV
 
-module AND3(input a,b,c, output out); // AND gate with three inputs
-    assign out = a & b & c;
-endmodule
-
 module NAND(input a, b, output out); // NAND gate
     assign out = !(a & b);
 endmodule
