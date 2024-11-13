@@ -1,9 +1,11 @@
 `include "../src/decoder.sv"
 
+`timescale 1ns/1ns
+
 module decoder_tb;
-    reg[2:0]address;
-    reg valid;
-    wire[7:0]sel;
+    reg[2:0]address; // input 3 bit address
+    reg valid; // valid signal, ordinarily received from FSM
+    wire[7:0]sel; // output sel signal
 
     Decoder dec(address, valid, sel);
     

@@ -1,11 +1,12 @@
 `include "../src/latch.sv"
 
-module d_latch_tb;
-    reg E;
-    reg D;
+`timescale 1ns/1ns
 
-    wire Q;
-    wire Q_not;
+module d_latch_tb;
+    reg E; // enable signal
+    reg D; // input data signal
+
+    wire Q, Q_not; // output data signals
 
     d_latch latch(D, E, Q, Q_not);
     
@@ -23,5 +24,4 @@ module d_latch_tb;
 
     $finish;
     end
-
 endmodule

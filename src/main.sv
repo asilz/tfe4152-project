@@ -1,6 +1,8 @@
 `include "../src/decoder.sv"
 `include "../src/latch.sv"
 
+`timescale 1ns/1ns
+
 module main_tb;
     wire[7:0]sel;
     reg[2:0]a;
@@ -54,7 +56,7 @@ module main_tb;
 
     initial begin
     $monitor("Time: %0t | input=%b,%b,%b,%b,%b,%b,%b,%b | a=%b,%b,%b | op=%b | select=%b | output=%b,%b,%b,%b,%b,%b,%b,%b | valid=%b | rw=%b | clk=%b | reset=%b | sel=%b,%b,%b,%b,%b,%b,%b,%b", 
-              $time,  
+              $realtime,  
               inp[7],inp[6],inp[5],inp[4],inp[3],inp[2],inp[1],inp[0],a[0], a[1], a[2], op, select,
               out_[0],out_[1], out_[2], out_[3], out_[4], out_[5], out_[6], out_[7], valid, rw, clk, reset, sel[0], sel[1], sel[2], sel[3], sel[4], sel[5], sel[6], sel[7]);
     

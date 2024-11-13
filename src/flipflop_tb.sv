@@ -1,13 +1,14 @@
 `include "../src/latch.sv"
 
+`timescale 1ns/1ns
+
 module flipflop_tb;
-    reg clk;
-    reg D;
+    reg clk; // clock signal
+    reg D; // input data signal
 
-    wire Q;
-    wire Q_not;
+    wire Q, Q_not; // output data signals
 
-    always
+    always // clock signal 200MHz
     begin
         #5 clk = 1;
         #5 clk = 0;

@@ -1,17 +1,17 @@
 `include "../src/latch.sv"
 
+`timescale 1ns/1ns
+
 module fsm_tb;
-    reg clk;
-    reg op;
-    reg select;
-    reg reset;
+    reg clk; // clock signal
+    reg op, select; // input signals to FSM
+    reg reset; // reset signal to reset the values contained in the FSM
     
-    wire valid;
-    wire rw;
+    wire valid, rw; // output signals
 
     FSM f(clk, op, select, reset, valid, rw);
 
-    always
+    always //clock signal 200MHz
     begin
         #5 clk = 1;
         #5 clk = 0;

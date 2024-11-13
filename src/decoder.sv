@@ -1,8 +1,10 @@
 `include "../src/gate.sv"
 
 module Decoder(input[2:0] address, input valid, output[7:0] word_select);
-    wire valid_not;
+    wire valid_not; // inverted valid signal
     INVERT i0(valid, valid_not);
+
+    // 8 NOR ports, 1 for each possible address
     NOR4 x0(valid_not,address[0],address[1],address[2], word_select[0]);
     NOR4 x1(valid_not,!address[0],address[1],address[2], word_select[1]);
     NOR4 x2(valid_not,address[0],!address[1],address[2], word_select[2]);

@@ -1,22 +1,19 @@
 `include "../src/gate.sv"
 
 module sr_latch(input R, S, output Q, Q_not);
-    sr_port sr0(R, Q_not, Q);
-    sr_port sr1(S, Q, Q_not);
-endmodule
-
-module sr_port(input a, b, output c);
-    NAND nand0(a, b, c);
+    NAND nand0(R, Q_not, Q);
+    NAND nand1(S, Q, Q_not);
 endmodule
 
 module d_latch(input D, E, output Q, Q_not);
+    wire nand0_out;
     wire nand1_out;
-    wire nand2_out;
     wire d_not;
-    NAND n1(D, E, nand1_out);
+
+    NAND nand0(D, E, nand0_out);
     INVERT i1(D, d_not);
-    NAND n2(d_not, E, nand2_out);
-    sr_latch sr(nand1_out, nand2_out, Q, Q_not);
+    NAND nand1(d_not, E, nand1_out);
+    sr_latch sr(nand0_out, nand1_out, Q, Q_not);
 endmodule
 
 module flipflop(input D, clk, output Q, Q_not);
@@ -62,9 +59,6 @@ module FSM(input clk, op, select, reset, output valid, rw);
     wire D_1_input;
     wire D_2_input;
 
-    wire valid_;
-    wire rw_;
-
     wire nor0_output;
     wire nor1_output;
     wire nor2_output;
@@ -77,7 +71,7 @@ module FSM(input clk, op, select, reset, output valid, rw);
     NOR nor1(op, nor0_output, nor1_output);
     NOR nor2(select, nor0_output, nor2_output);
     
-    NAND nand0(valid_, rw_, nand0_output);
+    NAND nand0(valid, rw, nand0_output);
 
     NOR or0(nor1_output, nor2_output, D_1_input_);
     AND nand1(nand0_output, select, D_2_input_);
@@ -86,92 +80,8 @@ module FSM(input clk, op, select, reset, output valid, rw);
     NOR nor4(reset, D_2_input_, D_2_input);
     
 
-    flipflop D_1(D_1_input, clk, D_1_output, rw_);
-    flipflop D_2(D_2_input, clk, D_2_output, valid_);
-
-    assign valid = valid_;
-    assign rw = rw_;
-    
-
-endmodule
-
-module Simple_FSM(input clk, reset, output valid, rw);
-    wire valid_;
-    wire rw_;
-    wire a;
-    wire b;
-
-    OR or0(reset, valid, valid_);
-    OR or1(reset, rw, rw_);
-
-    d_latch latch0(valid_, clk, valid, a);
-    d_latch latch1(rw_, clk, rw, b);
-endmodule
-
-module Bad_FSM(input clk, op, select, reset, output valid, rw);
-    wire D_1_input_;
-    wire D_2_input_;
-    wire D_1_output;
-    wire D_2_output;
-
-    wire op_not;
-    wire select_not;
-
-    wire or0_output;
-    wire and0_output;
-    wire and1_output;
-
-    INVERT inv0(op, op_not);
-    INVERT inv1(select, select_not);
-
-    OR or0(D_1_output, D_2_output, or0_output);
-    AND and0(op_not, or0_output, and0_output);
-
-    AND and1(or0_output, select_not, and1_output);
-    OR or1(and0_output, and1_output, D_1_input_);
-    NOR nor2(D_1_input_, reset, D_1_input);
-
-    AND and2(rw, valid, and2_output);
-    OR or3(select_not, and2_output, D_2_input_);
-    NOR nor4(D_2_input_, reset, D_2_input);
-
     flipflop D_1(D_1_input, clk, D_1_output, rw);
     flipflop D_2(D_2_input, clk, D_2_output, valid);
-endmodule
 
-module Good_FSM(input clk,input op,input select, input reset, output valid, output rw);
-
-    wire gamma;
-    wire phi;
-    wire D_1_output;
-    wire D_2_output;
-
-    wire op_not;
-    wire select_not;
-
-    wire alpha;
-    wire beta;
-    wire zeta;
-    wire epsilon;
-
-    wire D_1_input;
-    wire D_2_input;
-
-    INVERT inv0(op, op_not);
-    INVERT inv1(select, select_not);
-
-    OR or0(D_1_output, D_2_output, alpha);
-    AND and0(op_not, alpha, beta);
-
-    AND and1(alpha, select_not, zeta);
-    OR or1(beta, zeta, gamma);
-    OR nor2(gamma, reset, D_1_input);
-
-    AND and2(rw, valid, epsilon);
-    OR or3(select_not, epsilon, phi);
-    OR nor4(phi, reset, D_2_input);
-
-    flipflop D_1(D_1_input, clk, D_1_output, rw);
-    flipflop D_2(D_2_input, clk, D_2_output, valid);
 endmodule
     
