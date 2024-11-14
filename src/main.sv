@@ -58,7 +58,7 @@ module main_tb;
     $monitor("Time: %0t | input=%b,%b,%b,%b,%b,%b,%b,%b | a=%b,%b,%b | op=%b | select=%b | output=%b,%b,%b,%b,%b,%b,%b,%b | valid=%b | rw=%b | clk=%b | reset=%b | sel=%b,%b,%b,%b,%b,%b,%b,%b", 
               $realtime,  
               inp[7],inp[6],inp[5],inp[4],inp[3],inp[2],inp[1],inp[0],a[0], a[1], a[2], op, select,
-              out_[0],out_[1], out_[2], out_[3], out_[4], out_[5], out_[6], out_[7], valid, rw, clk, reset, sel[0], sel[1], sel[2], sel[3], sel[4], sel[5], sel[6], sel[7]);
+              out_[7],out_[6], out_[5], out_[4], out_[3], out_[2], out_[1], out_[0], valid, rw, clk, reset, sel[0], sel[1], sel[2], sel[3], sel[4], sel[5], sel[6], sel[7]);
     
     #3 
 
@@ -71,34 +71,32 @@ module main_tb;
     reset = 0;
     #10;
 
-    inp = 65;
+    inp = 65; // A ascii value
     op = 1;
     select = 1;
     #10
     a = 1;
     #10
-    inp = 83;
+    inp = 83; // S ascii value
     op = 1;
     select = 1;
     #10
     a = 2;
     #10
-    inp = 73;
+    inp = 73; // I ascii value
     op = 1;
     select = 1;
     #10
     a = 3;
     #10
 
-    inp = 73;
+    inp = 76; // L ascii value
     op = 1;
     select = 1;
 
     #10
     a = 4;
     #10
-
-    inp = 76;
     op = 1;
     select = 1;
     #10
@@ -113,6 +111,7 @@ module main_tb;
     a = 2;
     #10
     a = 3;
+    #10
 
     $finish;
     end
